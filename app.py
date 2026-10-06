@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template_string, send_from_directory, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
+import storage
 
 app = Flask(__name__)
 
@@ -73,12 +74,7 @@ def home():
 
             filename = secure_filename(file.filename)
 
-            file.save(
-                os.path.join(
-                    app.config["UPLOAD_FOLDER"],
-                    filename
-                )
-            )
+            storage.save_file(file, filename)
 
             message = f"File uploaded successfully: {filename}"
 
@@ -86,7 +82,7 @@ def home():
 
             message = "Please select a file."
 
-    files = os.listdir(app.config["UPLOAD_FOLDER"])
+    files = storage.list_files()
 
     return render_template_string(
         HTML,
