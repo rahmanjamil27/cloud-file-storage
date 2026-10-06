@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template_string, send_from_directory, redirect, url_for
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
@@ -70,14 +71,16 @@ def home():
 
         if file and file.filename:
 
+            filename = secure_filename(file.filename)
+
             file.save(
                 os.path.join(
                     app.config["UPLOAD_FOLDER"],
-                    file.filename
+                    filename
                 )
             )
 
-            message = f"File uploaded successfully: {file.filename}"
+            message = f"File uploaded successfully: {filename}"
 
         else:
 
