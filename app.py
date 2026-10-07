@@ -10,6 +10,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf", "doc", "docx", "txt", "zip"}
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 auth.init_db()
@@ -104,6 +105,11 @@ def home():
         if file and file.filename:
 
             filename = secure_filename(file.filename)
+
+            if "." not in filename or filename.rsplit(".", 1)[1].lower() not in ALLOWED_EXTENSIONS:
+                message = "File type not allowed."
+                files = files_db.get_user_files(session["user_id"])
+                return render_template_string(HTML, message=message, files=files)
 
             storage.save_file(file, filename, session["user_id"])
 
