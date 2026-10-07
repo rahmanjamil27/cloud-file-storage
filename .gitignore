@@ -4,3 +4,5 @@ __pycache__/
 uploads/
 .DS_Store
 .envusers.db
+
+app.log

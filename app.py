@@ -3,8 +3,10 @@ from werkzeug.utils import secure_filename
 import os
 import storage
 import auth
+from logger_config import logger
 
 app = Flask(__name__)
+logger.info("Cloud File Storage application started")
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 UPLOAD_FOLDER = "uploads"
